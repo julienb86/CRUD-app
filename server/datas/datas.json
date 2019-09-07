@@ -1,1 +1,9 @@
-[]
+[
+  {
+    "name": "Acer",
+    "price": "1.1",
+    "type": "laptop",
+    "id": "0",
+    "enable": true
+  }
+]

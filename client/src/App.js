@@ -1,39 +1,67 @@
 import React, {useState, useEffect} from 'react';
 import Products from './components/Products'
 import AddProduct from './components/AddProduct'
-
+import UpdateProduct from './components/UpdateProduct'
 
 function App() {
 
-  const [products, setProducts] = useState([]);
+  const initialProduct = {name: '', price : '', type: ''}
 
-  const url = "http://localhost:3000/api/products";
+  const [products, setProducts] = useState([]);
+  const [updated, setUpdated] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(initialProduct);
+
+
 
   const fetchProducts = async() =>{
-      let response = await fetch(url);
-      let data = await response.json();
-      setProducts(data);
-    };
+    let response = await fetch("http://localhost:3000/api/products");
+    let data = await response.json();
+    setProducts(data);
+  };
 
-    useEffect( () => {
-      fetchProducts();
-    }, []);
+  useEffect( () => {
+    fetchProducts();
+  }, [products]);
 
 
-    const createProduct = () => {
+  /* selectionne le bon produit dans la liste */
+  const updateSelected = product =>{
+    setUpdated(true);
+    setCurrentProduct({name: product.name, price: product.price, type: product.type});
+  }
+
+  const updateProduct = (id, updatedProduct) => {
       try{
-        fetch("http://localhost:3000/api/products", {
-        method: 'POST',
+        fetch(`http://localhost:3000/api/products/` + id, {
+        method: 'PUT',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({...products})
+        body: JSON.stringify({...updatedProduct})
       })
       .then(res => res.text())
       .then(res => console.log(res));
-      
       }catch(err){
         console.log(err);
       }
     }
+
+
+    const createProduct = (product) => {
+      try{
+        fetch("http://localhost:3000/api/products", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({...product})
+      })
+      .then(res => res.text())
+      .then(res => console.log(res));
+      }catch(err){
+        console.log(err);
+      }
+    }
+
+
+
+
 
   return (
     <div className="App">
@@ -41,12 +69,21 @@ function App() {
         <h1 className="text-center my-5">Nos produits</h1>
         <div className="row">
           <div className="col-md-6">
-            <h3 className="text-center">Créer un produit</h3>
-            <AddProduct createProduct={createProduct}/>
+              { updated ? (
+                <>
+                  <h3 className="text-center">Modifier le produit</h3>
+                  <UpdateProduct updated={updated} setUpdated={setUpdated} currentProduct={currentProduct} />
+                </>
+              ) : (
+                <>
+                  <h3 className="text-center">Créer un produit</h3>
+                  <AddProduct  createProduct={createProduct}/>
+                </>
+              )}
           </div>
           <div className="col-md-6">
             <h3 className="text-center">Liste de produits</h3>
-            <Products products={products}/>
+            <Products products={products} updateSelected={updateSelected}/>
           </div>
         </div>
       </div>

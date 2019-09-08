@@ -1,13 +1,10 @@
 import React, {useState} from 'react';
 
-const AddProduct = ({createProduct}) =>{
+const AddProduct = props =>{
 
-    const [product, setProduct] = useState({})
+  const emptyProduct = {name : '', price : '', type: ''};
+    const [product, setProduct] = useState(emptyProduct);
     
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        createProduct();
-      };
   
       const handleChange = event => {
         const {name, value} = event.target;
@@ -15,7 +12,11 @@ const AddProduct = ({createProduct}) =>{
       }
   
     return (
-        <form className="justify-content-center row" onSubmit={handleSubmit}>
+        <form className="justify-content-center row" onSubmit={event => {
+          event.preventDefault();
+            props.createProduct(product);
+            setProduct(emptyProduct);
+        }}>
           <div className="form-group">
             <label 
               htmlFor="name">
@@ -24,7 +25,7 @@ const AddProduct = ({createProduct}) =>{
             <input 
               type="text" 
               className="form-control" 
-              id="name" name="name" 
+              name="name" 
               value={product.name} 
               onChange={handleChange} 
               placeholder="Nom du produit"/>
@@ -38,7 +39,6 @@ const AddProduct = ({createProduct}) =>{
               value={product.price} 
               onChange={handleChange} 
               className="form-control" 
-              id="price" 
               placeholder="Prix"/>
             <label 
               htmlFor="price">
@@ -49,11 +49,8 @@ const AddProduct = ({createProduct}) =>{
               name="type" value={product.type} 
               onChange={handleChange} 
               className="form-control" 
-              id="type" 
               placeholder="Type"/>
-            <button 
-            onClick={createProduct} 
-            type="submit" 
+            <button
             className="btn btn-success form-control my-4">
                 Ajouter
             </button>

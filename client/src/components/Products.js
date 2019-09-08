@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Products = ({products}) => {
+const Products = props => {
     return (
         <>
         <div className="justify-content-center">
@@ -13,15 +13,15 @@ const Products = ({products}) => {
               </tr>
             </thead>
             <tbody >
-              {products.length > 0 ?(
-                products.map(product => (
-                  <tr>
-                  <td>{product.name}</td>
-                  <td>{product.price}</td>
-                  <td>
-                    <button className="btn btn-info">Modifier</button>
-                    <button className="btn btn-danger">Supprimer</button>
-                  </td>
+              {props.products.length > 0 ?(
+                props.products.map(product => (
+                  <tr key={product.id}>
+                    <td>{product.name}</td>
+                    <td>{product.price}</td>
+                    <td>
+                      <button className="btn btn-info" onClick={() => props.updateSelected(product)}>Modifier</button>
+                      <button className="btn btn-danger">Supprimer</button>
+                    </td>
                 </tr>
                 ))
               ) : (

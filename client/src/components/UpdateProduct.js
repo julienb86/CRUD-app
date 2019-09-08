@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react';
 const UpdateProduct = props =>{
 
     const [product, setProduct] = useState(props.currentProduct);
+    console.log(product)
 
   useEffect(()=>{
     setProduct(props.currentProduct);
@@ -52,12 +53,12 @@ const UpdateProduct = props =>{
             className="form-control" 
             placeholder="Type"/>
           <button 
-            className="btn btn-warning form-control my-4">
+            className="btn btn-success form-control my-4">
             Modifier
           </button>
           <button 
           onClick={() => props.setUpdated(false)}
-          className="btn btn-success form-control my-2">
+          className="btn btn-warning form-control my-2">
               Annuler
           </button>
         </div>

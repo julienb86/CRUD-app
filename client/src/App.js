@@ -21,16 +21,33 @@ function App() {
 
   useEffect( () => {
     fetchProducts();
-  }, [products]);
+  }, []);
 
 
   /* selectionne le bon produit dans la liste */
   const updateSelected = product =>{
     setUpdated(true);
-    setCurrentProduct({name: product.name, price: product.price, type: product.type});
+    setCurrentProduct({id: product.id, name: product.name, price: product.price, type: product.type});
   }
 
-  const updateProduct = (id, updatedProduct) => {
+    const createProduct = (product) => {
+      try{
+        fetch("http://localhost:3000/api/products", {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({...product})
+        
+      })
+      .then(res => res.text())
+      .then(res => console.log(res));
+      setProducts([...products, product])
+      }catch(err){
+        console.log(err);
+      }
+    }
+
+
+    const updateProduct = (id, updatedProduct) => {
       try{
         fetch(`http://localhost:3000/api/products/` + id, {
         method: 'PUT',
@@ -39,27 +56,26 @@ function App() {
       })
       .then(res => res.text())
       .then(res => console.log(res));
+      setProducts(products.map(product => product.id === id ? updatedProduct : product))
       }catch(err){
         console.log(err);
       }
     }
 
-
-    const createProduct = (product) => {
+    const deleteProduct = (id, product) => {
       try{
-        fetch("http://localhost:3000/api/products", {
-        method: 'POST',
+        fetch(`http://localhost:3000/api/products/` + id, {
+        method: 'DELETE',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({...product})
       })
       .then(res => res.text())
       .then(res => console.log(res));
+      setProducts(products.map(product => product.id !== id ));
       }catch(err){
         console.log(err);
       }
     }
-
-
 
 
 
@@ -72,7 +88,7 @@ function App() {
               { updated ? (
                 <>
                   <h3 className="text-center">Modifier le produit</h3>
-                  <UpdateProduct updated={updated} setUpdated={setUpdated} currentProduct={currentProduct} />
+                  <UpdateProduct updated={updated} setUpdated={setUpdated} currentProduct={currentProduct} updateProduct={updateProduct}/>
                 </>
               ) : (
                 <>
@@ -83,7 +99,7 @@ function App() {
           </div>
           <div className="col-md-6">
             <h3 className="text-center">Liste de produits</h3>
-            <Products products={products} updateSelected={updateSelected}/>
+            <Products products={products} updateSelected={updateSelected} deleteProduct={deleteProduct}/>
           </div>
         </div>
       </div>

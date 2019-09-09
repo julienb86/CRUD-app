@@ -3,7 +3,6 @@ import React, {useState, useEffect} from 'react';
 const UpdateProduct = props =>{
 
     const [product, setProduct] = useState(props.currentProduct);
-    console.log(product)
 
   useEffect(()=>{
     setProduct(props.currentProduct);
@@ -17,6 +16,9 @@ const UpdateProduct = props =>{
     return (
         <form className="justify-content-center row" onSubmit={event => {
           event.preventDefault();
+          if(!product.name || !product.price || !product.type){
+             return 
+          }
           props.updateProduct(product.id, product);
         }}>
         <div className="form-group">
@@ -53,7 +55,7 @@ const UpdateProduct = props =>{
             className="form-control" 
             placeholder="Type"/>
           <button 
-            className="btn btn-success form-control my-4">
+            className="btn btn-success form-control my-2">
             Modifier
           </button>
           <button 

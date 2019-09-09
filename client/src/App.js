@@ -4,14 +4,14 @@ import AddProduct from './components/AddProduct'
 import UpdateProduct from './components/UpdateProduct'
 
 function App() {
-
-  const initialProduct = {name: '', price : '', type: ''}
+  /* Créer un id aléatoire */
+  const uuidv4 = require('uuid/v4');
+  
+  const initialProduct = {id: null, name: '', price : '', type: ''}
 
   const [products, setProducts] = useState([]);
   const [updated, setUpdated] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(initialProduct);
-
-
 
   const fetchProducts = async() =>{
     let response = await fetch("http://localhost:3000/api/products");
@@ -31,6 +31,8 @@ function App() {
   }
 
     const createProduct = (product) => {
+      product.id = uuidv4();
+
       try{
         fetch("http://localhost:3000/api/products", {
         method: 'POST',
@@ -40,7 +42,7 @@ function App() {
       })
       .then(res => res.text())
       .then(res => console.log(res));
-      setProducts([...products, product])
+      setProducts([ ...products, product ])
       }catch(err){
         console.log(err);
       }
@@ -62,16 +64,15 @@ function App() {
       }
     }
 
-    const deleteProduct = (id, product) => {
+    const deleteProduct = (id) => {
       try{
         fetch(`http://localhost:3000/api/products/` + id, {
         method: 'DELETE',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({...product})
+        headers: {'Content-Type': 'application/json'}
       })
       .then(res => res.text())
       .then(res => console.log(res));
-      setProducts(products.map(product => product.id !== id ));
+      setProducts(products.filter(product => product.id !== id ));
       }catch(err){
         console.log(err);
       }
@@ -92,7 +93,7 @@ function App() {
                 </>
               ) : (
                 <>
-                  <h3 className="text-center">Créer un produit</h3>
+                  <h3 className="text-center">Ajouter un produit</h3>
                   <AddProduct  createProduct={createProduct}/>
                 </>
               )}

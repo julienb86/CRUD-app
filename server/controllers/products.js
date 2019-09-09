@@ -27,10 +27,8 @@ exports.createProducts = (req, res, next) => {
         }
         const newData = JSON.parse(data);
         let newProduct = req.body;
-        let key= "id";
         let enable = "enable";
         newData.push(newProduct);
-        newProduct[key] = (newData.length - 1).toString();
         newProduct[enable] = true;
         
     fs.writeFile('./datas/datas.json', JSON.stringify(newData, null, 2), (err)=>{
@@ -53,13 +51,13 @@ exports.updateProduct = (req, res, next) => {
 
         /* on cherche l'objet avec l'id dans l'url */
         const productId = newData.filter(d => d.id === product);
-        
-        /* fonction qui va retrouver l'index de l'objet avec l'id cherchée */
+
+        /* fonction qui va retrouver  l'index de l'objet avec l'id cherchée */
         function findId(id){
+            console.log(id.id)
             return id.id === productId[0].id;
         }
         const items = newData.findIndex(findId);
-
         let key = "id";
         let enable = "enable";
 
@@ -69,7 +67,7 @@ exports.updateProduct = (req, res, next) => {
         /* on ajoute l'id correspond à l'ancien */
         newData[items][key] = product;
         
-        /* on ajoute la valeur true à enable */
+        /* on ajoute la valeur true par défaut à enable */
         newData[items][enable] = true;
 
         fs.writeFile('./datas/datas.json', JSON.stringify(newData, null, 2), (err) => {
@@ -94,7 +92,7 @@ exports.deleteProduct = (req, res, next) => {
             if(err){
                 throw err;
             }
-            res.status(200).send(`Product with id : ${product} has bee removed`);
+            res.status(200).send(`Product with id : ${product} has been removed`);
         });
     });
 }

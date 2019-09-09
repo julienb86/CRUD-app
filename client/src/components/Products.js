@@ -17,10 +17,10 @@ const Products = props => {
                 props.products.map(product => (
                   <tr key={product.id}>
                     <td>{product.name}</td>
-                    <td>{product.price}</td>
+                    <td>{product.price} €</td>
                     <td>
-                      <button className="btn btn-info" onClick={() => props.updateSelected(product)}>Modifier</button>
-                      <button className="btn btn-danger" onClick={() => props.deleteProduct(product.id, product)}>Supprimer</button>
+                      <button className="btn btn-info mr-2" onClick={() => props.updateSelected(product)}>Modifier</button>
+                      <button className="btn btn-danger" onClick={() => props.deleteProduct(product.id)}>Supprimer</button>
                     </td>
                 </tr>
                 ))

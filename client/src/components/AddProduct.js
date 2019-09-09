@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 
 const AddProduct = props =>{
 
-  const emptyProduct = {name : '', price : '', type: ''};
+  const emptyProduct = {id :null, name : '', price : '', type: ''};
     const [product, setProduct] = useState(emptyProduct);
     
   
@@ -14,6 +14,9 @@ const AddProduct = props =>{
     return (
         <form className="justify-content-center row" onSubmit={event => {
           event.preventDefault();
+          if(!product.name || !product.price || !product.type){
+            return
+          }
             props.createProduct(product);
             setProduct(emptyProduct);
         }}>
@@ -25,6 +28,7 @@ const AddProduct = props =>{
             <input 
               type="text" 
               className="form-control" 
+              required
               name="name" 
               value={product.name} 
               onChange={handleChange} 
@@ -34,8 +38,9 @@ const AddProduct = props =>{
                 Prix
             </label>
             <input 
-              type="text" 
+              type="number" 
               name="price" 
+              required
               value={product.price} 
               onChange={handleChange} 
               className="form-control" 
@@ -46,7 +51,8 @@ const AddProduct = props =>{
             </label>
             <input 
               type="text" 
-              name="type" value={product.type} 
+              name="type" value={product.type}
+              required
               onChange={handleChange} 
               className="form-control" 
               placeholder="Type"/>

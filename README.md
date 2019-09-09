@@ -6,12 +6,12 @@ Clone this repo.
 
 ### Running the server.
 
-From within the backend folder, run **npm install**.
+From within the server folder, run **npm install**.
 
 You can then run the server with **node server**. The server should run on localhost with default port 3000.
 
 ### Running the client
 
-From within the frontend folder, run **npm install**.
+From within the client folder, run **npm install**.
 
 You can then run the client with **npm start**
